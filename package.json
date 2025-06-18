@@ -1,0 +1,14 @@
+{
+  "name": "delta-black-room-system",
+  "version": "1.0.0",
+  "description": "三角洲黑屋推测系统 - 基于各类数据视频制作，仅供娱乐",
+  "main": "BlackRom.html",
+  "scripts": {
+    "start": "http-server -p 8080"
+  },
+  "author": "Ziy",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
