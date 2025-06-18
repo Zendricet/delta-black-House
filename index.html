@@ -354,13 +354,13 @@
                     <i class="fas fa-user" style="font-size: 3rem; margin-bottom: 15px;"></i>
                     <h3>当前对局为正常对局</h3>
                 `;
-            } else if (totalScore >= 500 && totalScore < 700) {
+            } else if (totalScore >= 500 && totalScore < 800) {
                 resultArea.className = 'result-card high-bg';
                 resultArea.innerHTML = `
                     <i class="fas fa-user-shield" style="font-size: 3rem; margin-bottom: 15px;"></i>
                     <h3>当前对局为高压对局（可能存在外挂玩家）</h3>
                 `;
-            } else if (totalScore >= 700) {
+            } else if (totalScore >= 800) {
                 resultArea.className = 'result-card black-bg';
                 resultArea.innerHTML = `
                     <i class="fas fa-skull" style="font-size: 3rem; margin-bottom: 15px;"></i>
