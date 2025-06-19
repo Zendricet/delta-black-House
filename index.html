@@ -1,724 +1,308 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?9a837349ed45ebc2d38ad5dbc499a8be";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三角洲黑屋推测系统</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>三角洲黑屋机制分析器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="baidu-site-verification" content="codeva-CDzWeXXpLq" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>三角洲黑屋推测系统</h1>
+            <h1><i class="fas fa-shield-alt"></i> 三角洲黑屋机制分析器</h1>
+            <p class="subtitle">基于玩家行为数据分析的隔离机制推测系统</p>
         </header>
         
-        <div class="warning">
-            <i class="fas fa-exclamation-triangle"></i> 警告：基于各类黑屋机制推测视频制作，仅供娱乐；一切内容以游戏官方为准。
+        <!-- 公告模块 -->
+        <div class="announcement-card">
+            <div class="announcement-header">
+                <i class="fas fa-bullhorn"></i>
+                <span>系统公告</span>
+            </div>
+            <div class="announcement-content" id="announcement-content">
+                <!-- 公告内容将通过JavaScript动态加载 -->
+                <p>正在加载公告内容...</p>
+            </div>
         </div>
         
-        <div class="card player-data">
-            <h2 class="card-title">
-                <i class="fas fa-user-secret"></i> 玩家数据
-            </h2>
-            
-            <div class="input-group">
-                <div class="input-row">
-                    <div class="input-item">
-                        <label for="normal-kd"><i class="fas fa-shield-alt"></i> 普通 KD</label>
-                        <input type="number" id="normal-kd" class="normal" step="0.01" min="0" placeholder="输入数值">
-                    </div>
-                    <div class="input-item">
-                        <label for="confidential-kd"><i class="fas fa-user-lock"></i> 机密 KD</label>
-                        <input type="number" id="confidential-kd" class="confidential" step="0.01" min="0" placeholder="输入数值">
-                    </div>
-                    <div class="input-item">
-                        <label for="top-secret-kd"><i class="fas fa-skull"></i> 绝密 KD</label>
-                        <input type="number" id="top-secret-kd" class="top-secret" step="0.01" min="0" placeholder="输入数值">
-                    </div>
+        <div class="card-container">
+            <!-- 玩家数据卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user"></i>
+                    <span>玩家数据</span>
                 </div>
-                
-                <div class="input-row">
-                    <div class="input-item">
-                        <label for="overall-extract"><i class="fas fa-chart-line"></i> 总体撤离率</label>
-                        <input type="text" id="overall-extract" placeholder="输入百分比，如 10%">
+                <div class="card-body">
+                    <div class="module">
+                        <h3 class="module-title">
+                            <i class="fas fa-chart-line"></i>
+                            当前赛季主体数据
+                        </h3>
+                        <div class="data-grid">
+                            <div class="input-group">
+                                <label>普通KD</label>
+                                <input type="number" id="normal-kd" min="0" step="0.01" placeholder="输入数值">
+                            </div>
+                            <div class="input-group">
+                                <label>机密KD</label>
+                                <input type="number" id="confidential-kd" min="0" step="0.01" placeholder="输入数值">
+                            </div>
+                            <div class="input-group">
+                                <label>绝密KD</label>
+                                <input type="number" id="top-secret-kd" min="0" step="0.01" placeholder="输入数值">
+                            </div>
+                            <div class="input-group">
+                                <label>总体撤离率</label>
+                                <input type="number" id="extract-rate" min="0" max="100" step="0.1" placeholder="输入百分比">
+                            </div>
+                            <div class="input-group">
+                                <label>近十局撤离率</label>
+                                <input type="number" id="recent-extract" min="0" max="100" step="0.1" placeholder="输入百分比">
+                            </div>
+                            <div class="input-group">
+                                <label>赚损比 <span class="unit">(M)</span></label>
+                                <input type="number" id="profit-ratio" min="0" step="0.01" placeholder="输入数值">
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-item">
-                        <label for="recent-extract"><i class="fas fa-history"></i> 近十局撤离率</label>
-                        <input type="text" id="recent-extract" placeholder="输入百分比，如 10%">
-                    </div>
-                </div>
-            </div>
-            
-            <div id="result-area" class="result-card">
-                <!-- 结果将在这里显示 -->
-            </div>
-        </div>
-        
-        <div class="card">
-            <h2 class="card-title">
-                <i class="fas fa-calculator"></i> 预估隐藏分
-            </h2>
-            <div id="hidden-score" class="hidden-score">
-                <p>未填写五维能力，无法计算</p>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="toggle-header" id="dimensions-toggle">
-                <h2 class="card-title">
-                    <i class="fas fa-chart-radar"></i> 五维能力评估（可选）
-                </h2>
-                <i class="fas fa-chevron-down" id="dimensions-icon"></i>
-            </div>
-            
-            <div class="toggle-content" id="dimensions-content">
-                <div class="dimensions-grid">
-                    <div class="dimension-item">
-                        <label><i class="fas fa-fist-raised"></i> 战斗</label>
-                        <input type="number" id="combat" min="0" max="100" placeholder="0-100">
-                    </div>
-                    <div class="dimension-item">
-                        <label><i class="fas fa-coins"></i> 财富</label>
-                        <input type="number" id="wealth" min="0" max="100" placeholder="0-100">
-                    </div>
-                    <div class="dimension-item">
-                        <label><i class="fas fa-search"></i> 搜索</label>
-                        <input type="number" id="search" min="0" max="100" placeholder="0-100">
-                    </div>
-                    <div class="dimension-item">
-                        <label><i class="fas fa-heartbeat"></i> 生存</label>
-                        <input type="number" id="survival" min="0" max="100" placeholder="0-100">
-                    </div>
-                    <div class="dimension-item">
-                        <label><i class="fas fa-users"></i> 合作</label>
-                        <input type="number" id="cooperation" min="0" max="100" placeholder="0-100">
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="toggle-header" id="explanation-toggle">
-                <h2 class="card-title">
-                    <i class="fas fa-book"></i> 黑屋机制推测
-                </h2>
-                <i class="fas fa-chevron-down" id="explanation-icon"></i>
-            </div>
-            
-            <div class="toggle-content" id="explanation-content">
-                <div class="explanation">
-                    <h3>黑屋机制原理分析</h3>
-                    <p>黑屋本质是游戏对"异常行为"的隔离机制，可能触发场景如下：</p>
                     
-                    <ul>
-                        <li><strong>高强度对局行为</strong>：如"打人猛攻流"，玩家短期内高频击败干员（连续多局高击杀），或隐藏分因战绩飙升，系统判定与"高风险玩家"（含疑似外挂、高违规倾向账号）行为趋同，触发隔离；</li>
-                        
-                        <li><strong>异常玩法流派</strong>：像"唐人玩法"（低强度刷局控数据）、"不打不搜装满保险找人送"（非正常游戏流程），因偏离常规游玩逻辑，被系统识别为异常，强制送入黑屋；</li>
-                        
-                        <li><strong>资产/收益异常</strong>：护航玩家连续多局带出高额资产（如单局500万+），或"舔包流"（零击杀但满背包撤离）等非常规收益行为，触发针对"经济异常"的隔离，迫使消耗资产。</li>
-                    </ul>
+                    <div class="module">
+                        <h3 class="module-title">
+                            <i class="fas fa-star"></i>
+                            当前赛季五维能力
+                        </h3>
+                        <div class="data-grid">
+                            <div class="input-group">
+                                <label>战斗</label>
+                                <input type="number" id="combat" min="0" max="100" step="1" placeholder="0-100">
+                            </div>
+                            <div class="input-group">
+                                <label>财富</label>
+                                <input type="number" id="wealth" min="0" max="100" step="1" placeholder="0-100">
+                            </div>
+                            <div class="input-group">
+                                <label>搜索</label>
+                                <input type="number" id="search" min="0" max="100" step="1" placeholder="0-100">
+                            </div>
+                            <div class="input-group">
+                                <label>合作</label>
+                                <input type="number" id="cooperation" min="0" max="100" step="1" placeholder="0-100">
+                            </div>
+                            <div class="input-group">
+                                <label>生存</label>
+                                <input type="number" id="survival" min="0" max="100" step="1" placeholder="0-100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 机制说明卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-cogs"></i>
+                    <span>机制说明</span>
+                </div>
+                <div class="card-body">
+                    <div class="content-box">
+                        <p>黑屋本质是游戏对"异常行为"的隔离机制，可能触发场景如下：</p>
+                        <p>1. 高强度对局行为：如"打人猛攻流"，玩家短期内高频击败干员（连续多局高击杀），或隐藏分因战绩飙升，系统判定与"高风险玩家"（含疑似外挂、高违规倾向账号）行为趋同，触发隔离；</p>
+                        <p>2. 异常玩法流派：像"唐人玩法"（低强度刷局控数据）、"不打不搜装满保险找人送"（非正常游戏流程），因偏离常规游玩逻辑，被系统识别为异常，强制送入黑屋；</p>
+                        <p>3. 资产/收益异常：护航玩家连续多局带出高额资产（如单局500万+），或"舔包流"（零击杀但满背包撤离）等非常规收益行为，触发针对"经济异常"的隔离，迫使消耗资产。</p>
+                        <p class="red-text">4. 异常组队情况：队伍中出现异常人员（被标记人员）或匹配敌人数据异常（被标记或外挂使用者）而被玩家击杀导致自身账号被异常标记导致匹配黑屋对局（匿名用户提供）</p>
+                    </div>
+                    <div class="content-box">
+                        <p>本推测系统基于对Bilibili、抖音、快手等平台视频内容分析提炼制作，其内容及计算公式与游戏存在较大误差；关于游戏是否存在小黑屋机制以官方公告为准！</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 免责声明卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>免责声明</span>
+                </div>
+                <div class="card-body">
+                    <div class="content-box">
+                        <p>本工具仅用于玩家数据分析与行为模式推测，所有计算结果均为基于公开信息的理论推测，不代表游戏实际机制。</p>
+                        <p>本工具不会收集或存储您的个人数据，所有计算均在浏览器本地完成。分析结果仅供参考，不构成任何游戏建议。</p>
+                        <p>游戏开发者保留对匹配机制和账号管理的最终解释权，请以官方公告为准。</p>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="btn-container">
-            <button class="btn glow" id="analyze-btn">
-                <i class="fas fa-cogs"></i> 分析数据
+            <button class="analyze-btn" id="analyze-btn">
+                <i class="fas fa-chart-pie"></i>
+                分析数据
             </button>
         </div>
-        
-        <footer>
-            <p>本数据分析仅供娱乐，一切游戏机制及相关内容以官方为准</p>
-            <div class="copyright">Ziy制作 © 2025</div>
-        </footer>
     </div>
     
-    <!-- 进度条弹窗 -->
-    <div class="progress-modal" id="progress-modal">
-        <div class="progress-content">
-            <h3 class="progress-title"><i class="fas fa-cogs fa-spin"></i> 分析数据中...</h3>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <p>正在计算匹配结果，请稍候</p>
-        </div>
-    </div>
-    
-    <!-- 捐赠弹窗 -->
-    <div class="donation-modal" id="donation-modal">
-        <div class="donation-content">
-            <h2 class="donation-title">感谢您的使用与支持，不妨考虑捐赠</h2>
-            <img class="donation-image" src="res/play.png" alt="捐赠支持">
-            <p class="donation-text">您的支持将帮助我们持续改进和优化系统</p>
-            <button class="close-btn" id="close-donation">关闭窗口</button>
-        </div>
-    </div>
-
-    <script>
-        // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 清空所有输入框
-            document.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-            
-            // 展开黑屋机制推测
-            document.getElementById('explanation-content').style.display = 'block';
-            document.getElementById('explanation-icon').className = 'fas fa-chevron-up';
-            
-            // 刷新计数逻辑
-            let refreshCount = localStorage.getItem('refreshCount') || 0;
-            refreshCount = parseInt(refreshCount) + 1;
-            localStorage.setItem('refreshCount', refreshCount);
-            
-            // 每5次刷新显示捐赠弹窗
-            if (refreshCount % 5 === 0) {
-                setTimeout(() => {
-                    document.getElementById('donation-modal').style.display = 'flex';
-                }, 2000);
-            }
-            
-            console.log(`当前刷新次数: ${refreshCount}`);
-        });
-        
-        // 折叠功能
-        document.getElementById('dimensions-toggle').addEventListener('click', function() {
-            const content = document.getElementById('dimensions-content');
-            const icon = document.getElementById('dimensions-icon');
-            
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                icon.className = 'fas fa-chevron-down';
-            } else {
-                content.style.display = 'block';
-                icon.className = 'fas fa-chevron-up';
-            }
-        });
-        
-        document.getElementById('explanation-toggle').addEventListener('click', function() {
-            const content = document.getElementById('explanation-content');
-            const icon = document.getElementById('explanation-icon');
-            
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                icon.className = 'fas fa-chevron-down';
-            } else {
-                content.style.display = 'block';
-                icon.className = 'fas fa-chevron-up';
-            }
-        });
-        
-        // KD输入框颜色变化
-        document.getElementById('normal-kd').addEventListener('input', function() {
-            const value = parseFloat(this.value) || 0;
-            this.className = 'normal';
-            if (value < 1) this.classList.add('top-secret');
-            else if (value < 2) this.classList.add('confidential');
-        });
-        
-        document.getElementById('confidential-kd').addEventListener('input', function() {
-            const value = parseFloat(this.value) || 0;
-            this.className = 'confidential';
-            if (value < 1) this.classList.add('top-secret');
-            else if (value > 3) this.classList.add('normal');
-        });
-        
-        document.getElementById('top-secret-kd').addEventListener('input', function() {
-            const value = parseFloat(this.value) || 0;
-            this.className = 'top-secret';
-            if (value < 1) this.classList.add('normal');
-            else if (value < 2) this.classList.add('confidential');
-        });
-        
-        // 近十局撤离率输入处理
-        document.getElementById('recent-extract').addEventListener('input', function() {
-            const value = parseFloat(this.value) || 0;
-            this.parentElement.className = 'input-item';
-            if (value > 40) this.parentElement.classList.add('red');
-        });
-        
-        // 分析按钮事件
-        document.getElementById('analyze-btn').addEventListener('click', function() {
-            // 获取输入值
-            const normalKD = parseFloat(document.getElementById('normal-kd').value) || 0;
-            const confidentialKD = parseFloat(document.getElementById('confidential-kd').value) || 0;
-            const topSecretKD = parseFloat(document.getElementById('top-secret-kd').value) || 0;
-            
-            // 处理撤离率（去掉%符号）
-            const overallExtract = parseFloat(document.getElementById('overall-extract').value) || 0;
-            const recentExtract = parseFloat(document.getElementById('recent-extract').value) || 0;
-            
-            // 获取五维能力值
-            const combat = parseFloat(document.getElementById('combat').value) || 0;
-            const wealth = parseFloat(document.getElementById('wealth').value) || 0;
-            const search = parseFloat(document.getElementById('search').value) || 0;
-            const survival = parseFloat(document.getElementById('survival').value) || 0;
-            const cooperation = parseFloat(document.getElementById('cooperation').value) || 0;
-            
-            // 显示进度条
-            const modal = document.getElementById('progress-modal');
-            modal.style.display = 'flex';
-            
-            // 进度条动画
-            let width = 0;
-            const interval = setInterval(() => {
-                width += 1;
-                document.getElementById('progress-fill').style.width = width + '%';
-                
-                if (width >= 100) {
-                    clearInterval(interval);
-                    modal.style.display = 'none';
-                    
-                    // 计算总分
-                    const totalScore = calculateScore(normalKD, confidentialKD, topSecretKD, overallExtract, recentExtract);
-                    
-                    // 显示结果
-                    showResult(totalScore);
-                    
-                    // 计算并显示隐藏分
-                    calculateHiddenScore(totalScore, combat, wealth, search, survival, cooperation);
-                }
-            }, 35); // 总时间约3.5秒
-        });
-        
-        // 计算得分函数
-        function calculateScore(normalKD, confidentialKD, topSecretKD, overallExtract, recentExtract) {
-            let totalScore = 0;
-            
-            // 普通KD计算
-            if (normalKD > 3) {
-                totalScore += normalKD * 3;
-            } else {
-                totalScore += normalKD * 2;
-            }
-            
-            // 机密KD计算
-            if (confidentialKD < 1) {
-                totalScore += confidentialKD * 2;
-            } else if (confidentialKD >= 1 && confidentialKD < 2) {
-                totalScore += confidentialKD * 3;
-            } else if (confidentialKD >= 2 && confidentialKD < 3) {
-                totalScore += confidentialKD * 4;
-            } else if (confidentialKD >= 3) {
-                totalScore += confidentialKD * 5;
-            }
-            
-            // 绝密KD计算
-            if (topSecretKD < 1) {
-                totalScore += topSecretKD * 5;
-            } else if (topSecretKD >= 1 && topSecretKD < 2) {
-                totalScore += topSecretKD * 7;
-            } else if (topSecretKD >= 2 && topSecretKD < 3) {
-                totalScore += topSecretKD * 9;
-            } else if (topSecretKD >= 3) {
-                totalScore += topSecretKD * 11;
-            }
-            
-            // 总体撤离率计算
-            if (overallExtract < 20) {
-                totalScore += overallExtract * 3;
-            } else if (overallExtract >= 20 && overallExtract < 40) {
-                totalScore += overallExtract * 4;
-            } else if (overallExtract >= 40 && overallExtract < 55) {
-                totalScore += overallExtract * 5;
-            } else if (overallExtract >= 55) {
-                totalScore += overallExtract * 6;
-            }
-            
-            // 近十局撤离率计算
-            if (recentExtract < 30) {
-                totalScore += recentExtract * 5;
-            } else if (recentExtract >= 30 && recentExtract < 50) {
-                totalScore += recentExtract * 10;
-            } else if (recentExtract >= 50) {
-                totalScore += recentExtract * 15;
-            }
-            
-            return Math.round(totalScore);
-        }
-        
-        // 显示结果函数 - 修改了高压对局的描述
-        function showResult(totalScore) {
-            const resultArea = document.getElementById('result-area');
-            resultArea.style.display = 'block';
-            resultArea.className = 'result-card normal-bg';
-            
-            if (totalScore < 400) {
-                resultArea.innerHTML = `
-                    <i class="fas fa-user-check" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                    <h3>当前对局为唐人/正常对局</h3>
-                `;
-            } else if (totalScore >= 400 && totalScore < 500) {
-                resultArea.innerHTML = `
-                    <i class="fas fa-user" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                    <h3>当前对局为正常对局</h3>
-                `;
-            } else if (totalScore >= 500 && totalScore < 800) {
-                resultArea.className = 'result-card high-bg';
-                resultArea.innerHTML = `
-                    <i class="fas fa-user-shield" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                    <h3>当前对局为高压对局（可能存在外挂玩家）</h3>
-                `;
-            } else if (totalScore >= 800) {
-                resultArea.className = 'result-card black-bg';
-                resultArea.innerHTML = `
-                    <i class="fas fa-skull" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                    <h3>当前对局为黑屋号</h3>
-                `;
-            }
-            
-            // 滚动到结果区域
-            resultArea.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // 计算并显示隐藏分
-        function calculateHiddenScore(totalScore, combat, wealth, search, survival, cooperation) {
-            const hiddenScoreElement = document.getElementById('hidden-score');
-            hiddenScoreElement.style.display = 'block';
-            
-            // 检查五维能力是否填写
-            if (combat === 0 && wealth === 0 && search === 0 && survival === 0 && cooperation === 0) {
-                hiddenScoreElement.innerHTML = `<p>未填写五维能力，无法计算</p>`;
-                return;
-            }
-            
-            // 计算隐藏分
-            const dimensionScore = (combat * 10 + wealth * 10 + search * 10 + survival * 10 + cooperation * 10) / 5;
-            const hiddenScore = Math.round(totalScore + dimensionScore);
-            
-            hiddenScoreElement.innerHTML = `
-                <h3><i class="fas fa-key"></i> 当前预估隐藏分</h3>
-                <div style="font-size: 2.5rem; font-weight: bold; margin: 15px 0; color: #3b82f6;">${hiddenScore}</div>
-                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-                    <div>战斗: ${combat}</div>
-                    <div>财富: ${wealth}</div>
-                    <div>搜索: ${search}</div>
-                    <div>生存: ${survival}</div>
-                    <div>合作: ${cooperation}</div>
+    <!-- 进度条模态框 -->
+    <div class="modal" id="progress-modal">
+        <div class="modal-content">
+            <div class="progress-container">
+                <p class="progress-text">分析中，请稍候...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
                 </div>
-                <button class="report-btn" id="generate-report">
-                    <i class="fas fa-file-alt"></i> 生成账号报告
-                </button>
-            `;
+            </div>
+        </div>
+    </div>
+    
+    <!-- 报告模态框 -->
+    <div class="modal" id="report-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                三角洲黑屋推测玩家数据报告
+                <button class="close-modal" id="close-report">&times;</button>
+            </div>
             
-            // 绑定生成报告按钮事件
-            document.getElementById('generate-report').addEventListener('click', generateReport);
-        }
-        
-        // 生成账号报告 - 添加了详细的报告说明
-        function generateReport() {
-            // 收集所有数据
-            const data = {
-                normalKD: document.getElementById('normal-kd').value || '未填写',
-                confidentialKD: document.getElementById('confidential-kd').value || '未填写',
-                topSecretKD: document.getElementById('top-secret-kd').value || '未填写',
-                overallExtract: document.getElementById('overall-extract').value || '未填写',
-                recentExtract: document.getElementById('recent-extract').value || '未填写',
-                combat: document.getElementById('combat').value || '未填写',
-                wealth: document.getElementById('wealth').value || '未填写',
-                search: document.getElementById('search').value || '未填写',
-                survival: document.getElementById('survival').value || '未填写',
-                cooperation: document.getElementById('cooperation').value || '未填写',
-                result: document.querySelector('#result-area h3') ? document.querySelector('#result-area h3').textContent : '未分析',
-                hiddenScore: document.querySelector('#hidden-score > div') ? document.querySelector('#hidden-score > div').textContent : '未计算'
-            };
-            
-            // 获取当前时间
-            const now = new Date();
-            const formattedDate = `${now.getFullYear()}年${(now.getMonth()+1).toString().padStart(2, '0')}月${now.getDate().toString().padStart(2, '0')}日 ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-            
-            // 创建新窗口
-            const reportWindow = window.open('', '_blank', 'width=800,height=900');
-            
-            // 写入报告内容
-            reportWindow.document.write(`
-                <!DOCTYPE html>
-                <html lang="zh-CN">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>账号分析报告（仅娱乐）</title>
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                    <style>
-                        * {
-                            margin: 0;
-                            padding: 0;
-                            box-sizing: border-box;
-                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        }
-                        
-                        body {
-                            background: linear-gradient(135deg, #0f1a3d, #1e3a8a);
-                            color: #f0f9ff;
-                            min-height: 100vh;
-                            padding: 20px;
-                        }
-                        
-                        .report-container {
-                            max-width: 800px;
-                            margin: 0 auto;
-                            background: rgba(15, 23, 42, 0.9);
-                            border-radius: 15px;
-                            padding: 30px;
-                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                        }
-                        
-                        .report-header {
-                            text-align: center;
-                            margin-bottom: 30px;
-                            padding-bottom: 20px;
-                            border-bottom: 2px solid #3b82f6;
-                        }
-                        
-                        .report-header h1 {
-                            font-size: 2.2rem;
-                            margin-bottom: 10px;
-                            background: linear-gradient(to right, #93c5fd, #bfdbfe);
-                            -webkit-background-clip: text;
-                            background-clip: text;
-                            color: transparent;
-                        }
-                        
-                        .report-time {
-                            font-size: 1.1rem;
-                            color: #93c5fd;
-                            margin-top: 10px;
-                        }
-                        
-                        .section {
-                            margin-bottom: 30px;
-                            background: rgba(30, 41, 59, 0.5);
-                            border-radius: 10px;
-                            padding: 20px;
-                        }
-                        
-                        .section h2 {
-                            color: #93c5fd;
-                            margin-bottom: 20px;
-                            padding-bottom: 10px;
-                            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
-                        }
-                        
-                        .data-grid {
-                            display: grid;
-                            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                            gap: 15px;
-                        }
-                        
-                        .data-item {
-                            background: rgba(15, 23, 42, 0.7);
-                            border-radius: 8px;
-                            padding: 15px;
-                            border: 1px solid #1e40af;
-                        }
-                        
-                        .data-label {
-                            font-weight: 600;
-                            color: #bfdbfe;
-                            margin-bottom: 5px;
-                        }
-                        
-                        .data-value {
-                            font-size: 1.2rem;
-                            font-weight: bold;
-                            color: #3b82f6;
-                        }
-                        
-                        .result-item {
-                            text-align: center;
-                            padding: 20px;
-                            border-radius: 10px;
-                            background: rgba(26, 51, 128, 0.3);
-                            margin-top: 15px;
-                        }
-                        
-                        .result-value {
-                            font-size: 1.8rem;
-                            font-weight: bold;
-                            color: #93c5fd;
-                            margin: 10px 0;
-                        }
-                        
-                        .report-explanation {
-                            background: rgba(15, 23, 42, 0.7);
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-top: 20px;
-                            border-left: 4px solid #3b82f6;
-                        }
-                        
-                        .report-explanation h3 {
-                            color: #93c5fd;
-                            margin-bottom: 15px;
-                        }
-                        
-                        .explanation-item {
-                            margin-bottom: 15px;
-                            padding-left: 20px;
-                            position: relative;
-                        }
-                        
-                        .explanation-item:before {
-                            content: "•";
-                            position: absolute;
-                            left: 0;
-                            color: #3b82f6;
-                            font-size: 1.5rem;
-                        }
-                        
-                        .explanation-title {
-                            font-weight: bold;
-                            color: #bfdbfe;
-                            margin-bottom: 5px;
-                        }
-                        
-                        .red-text {
-                            color: #ef4444;
-                        }
-                        
-                        .disclaimer {
-                            text-align: center;
-                            margin-top: 30px;
-                            padding-top: 20px;
-                            border-top: 1px solid rgba(59, 130, 246, 0.3);
-                            color: #cbd5e1;
-                            font-size: 0.9rem;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="report-container">
-                        <div class="report-header">
-                            <h1>账号分析报告（仅娱乐）</h1>
-                            <p class="report-time">生成时间：${formattedDate}</p>
-                        </div>
-                        
-                        <div class="section">
-                            <h2><i class="fas fa-user-secret"></i> 玩家数据</h2>
-                            <div class="data-grid">
-                                <div class="data-item">
-                                    <div class="data-label">普通 KD</div>
-                                    <div class="data-value">${data.normalKD}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">机密 KD</div>
-                                    <div class="data-value">${data.confidentialKD}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">绝密 KD</div>
-                                    <div class="data-value">${data.topSecretKD}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">总体撤离率</div>
-                                    <div class="data-value">${data.overallExtract}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">近十局撤离率</div>
-                                    <div class="data-value">${data.recentExtract}</div>
-                                </div>
+            <div class="report-card">
+                <!-- 玩家数据卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user"></i>
+                        <span>玩家数据</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="data-grid">
+                            <div class="input-group">
+                                <label>普通KD</label>
+                                <input type="text" id="report-normal-kd" readonly>
+                            </div>
+                            <div class="input-group">
+                                <label>机密KD</label>
+                                <input type="text" id="report-confidential-kd" readonly>
+                            </div>
+                            <div class="input-group">
+                                <label>绝密KD</label>
+                                <input type="text" id="report-top-secret-kd" readonly>
+                            </div>
+                            <div class="input-group">
+                                <label>总体撤离率</label>
+                                <input type="text" id="report-extract-rate" readonly>
+                            </div>
+                            <div class="input-group">
+                                <label>近十局撤离率</label>
+                                <input type="text" id="report-recent-extract" readonly>
+                            </div>
+                            <div class="input-group">
+                                <label>赚损比 <span class="unit">(M)</span></label>
+                                <input type="text" id="report-profit-ratio" readonly>
                             </div>
                         </div>
                         
-                        <div class="section">
-                            <h2><i class="fas fa-chart-radar"></i> 五维能力</h2>
-                            <div class="data-grid">
-                                <div class="data-item">
-                                    <div class="data-label">战斗</div>
-                                    <div class="data-value">${data.combat}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">财富</div>
-                                    <div class="data-value">${data.wealth}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">搜索</div>
-                                    <div class="data-value">${data.search}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">生存</div>
-                                    <div class="data-value">${data.survival}</div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label">合作</div>
-                                    <div class="data-value">${data.cooperation}</div>
-                                </div>
+                        <div class="data-grid">
+                            <div class="input-group">
+                                <label>战斗</label>
+                                <input type="text" id="report-combat" readonly>
                             </div>
-                        </div>
-                        
-                        <div class="section">
-                            <h2><i class="fas fa-chart-bar"></i> 分析结果</h2>
-                            <div class="data-item">
-                                <div class="data-label">对局类型</div>
-                                <div class="result-value">${data.result}</div>
+                            <div class="input-group">
+                                <label>财富</label>
+                                <input type="text" id="report-wealth" readonly>
                             </div>
-                            <div class="data-item">
-                                <div class="data-label">预估隐藏分</div>
-                                <div class="result-value">${data.hiddenScore}</div>
+                            <div class="input-group">
+                                <label>搜索</label>
+                                <input type="text" id="report-search" readonly>
                             </div>
-                        </div>
-                        
-                        <div class="report-explanation">
-                            <h3><i class="fas fa-info-circle"></i> 报告说明</h3>
-                            
-                            <div class="explanation-item">
-                                <div class="explanation-title">对局介绍：</div>
-                                <p>
-                                    <strong>唐人局/正常对局：</strong>根据当前数据分析结果在游戏匹配中大概率匹配对局低强度对局和正常对局。账号数据非常良好。
-                                </p>
-                                <p>
-                                    <strong>正常对局：</strong>据当前数据分析结果在游戏匹配中大概率匹配对局为正常对局强度或中强度对局。账号数据一般。
-                                </p>
-                                <p>
-                                    <strong>高压对局：</strong>据当前数据分析结果在游戏匹配中大概率为高强度对局，可能存在外挂等。账号数据较差，<span class="red-text">应降低最近撤离率或收益比等数据。强度过高可能会导致频繁出入黑屋</span>。
-                                </p>
-                                <p>
-                                    <strong>黑屋对局：</strong>据当前数据分析结果在游戏匹配中大概率为黑屋对局，存在外挂、主播、低爆率等情况，组队时将直接拉高其他组队玩家数据，导致强度极度异常。<span class="red-text">应降低最近撤离率、收益比、KD等数据。强度过高可能会导致频繁出入黑屋</span>。
-                                </p>
+                            <div class="input-group">
+                                <label>合作</label>
+                                <input type="text" id="report-cooperation" readonly>
                             </div>
-                            
-                            <div class="explanation-item">
-                                <div class="explanation-title">黑屋机制原理分析：</div>
-                                <p>黑屋本质是游戏对"异常行为"的隔离机制，可能触发场景如下：</p>
-                                <p>
-                                    <strong>高强度对局行为：</strong>如"打人猛攻流"，玩家短期内高频击败干员（连续多局高击杀），或隐藏分因战绩飙升，系统判定与"高风险玩家"（含疑似外挂、高违规倾向账号）行为趋同，触发隔离；
-                                </p>
-                                <p>
-                                    <strong>异常玩法流派：</strong>像"唐人玩法"（低强度刷局控数据）、"不打不搜装满保险找人送"（非正常游戏流程），因偏离常规游玩逻辑，被系统识别为异常，强制送入黑屋；
-                                </p>
-                                <p>
-                                    <strong>资产/收益异常：</strong>护航玩家连续多局带出高额资产（如单局500万+），或"舔包流"（零击杀但满背包撤离）等非常规收益行为，触发针对"经济异常"的隔离，迫使消耗资产。
-                                </p>
+                            <div class="input-group">
+                                <label>生存</label>
+                                <input type="text" id="report-survival" readonly>
                             </div>
-                        </div>
-                        
-                        <div class="disclaimer">
-                            <p>本数据分析仅供娱乐，一切游戏机制及相关内容以官方为准</p>
-                            <p>三角洲黑屋推测系统 · Ziy制作 © 2023</p>
                         </div>
                     </div>
-                </body>
-                </html>
-            `);
-            
-            reportWindow.document.close();
-        }
-        
-        // 关闭捐赠弹窗
-        document.getElementById('close-donation').addEventListener('click', function() {
-            document.getElementById('donation-modal').style.display = 'none';
-        });
-    </script>
+                </div>
+                
+                <!-- 分析结果卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>分析结果</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="result-card">
+                            <h3 class="result-title">
+                                <i class="fas fa-chess-knight"></i>
+                                对局强度分析
+                            </h3>
+                            <div class="result-value" id="match-intensity">正常对局</div>
+                        </div>
+                        
+                        <h3 class="result-title">
+                            <i class="fas fa-map-marked-alt"></i>
+                            能力值分布图
+                        </h3>
+                        <div class="chart-container">
+                            <div class="x-axis"></div>
+                            <div class="y-axis"></div>
+                            <div class="axis-label x-label">基础值</div>
+                            <div class="axis-label y-label">战斗值</div>
+                            <div class="data-point" id="data-point"></div>
+                        </div>
+                        
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color legend-low"></div>
+                                <span>低强对局</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color legend-normal"></div>
+                                <span>正常对局</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color legend-high"></div>
+                                <span>高压对局</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color legend-black"></div>
+                                <span>黑屋对局</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据建议卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>数据建议</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="advice-card">
+                            <h3 class="advice-title">
+                                <i class="fas fa-user-shield"></i>
+                                行为优化建议
+                            </h3>
+                            <div class="advice-content" id="advice-content">
+                                <p>根据您的数据分析结果，建议采取以下策略优化游戏行为：</p>
+                                <ul>
+                                    <li>平衡战斗行为，避免连续多局高击杀表现</li>
+                                    <li>调整收益模式，避免单局过高资产收益</li>
+                                    <li>组队时注意队友行为模式，避免与异常账号组队</li>
+                                    <li>保持撤离率在合理范围，避免极端刷数据行为</li>
+                                </ul>
+                                <p>请注意：以上建议仅基于数据分析模型，实际效果可能因游戏机制调整而变化。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>三角洲黑屋机制分析器 &copy; 2025 | 本工具仅供娱乐参考，不作为游戏机制官方说明</p>
+    </footer>
+    
+    <script src="script.js"></script>
 </body>
 </html>
