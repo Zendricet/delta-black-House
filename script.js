@@ -25,9 +25,8 @@ function fetchAnnouncement() {
     // 在实际应用中，这里会从服务器获取res/Proclamation.txt文件内容
     // 这里我们模拟文件内容
     const proclamationContent = `
-        <p><span class="important">【重要更新】</span> 黑屋分析算法V2.0已上线！</p>
-        <p>本次更新重构全部算法和网页，数据评价更加相对准确</p>
-        <p class="important">警告：据匿名用户反馈组队匹配池与单排匹配池不同，组队匹配池当队伍三名玩家其中任意一位数据发生变化时将存在“待定局”，“待定局”数据过高将会导致匹配结果高压！</p>
+        <p><span class="important">【重要更新】</span> 黑屋分析算法V2.0已上线！本次更新重构全部算法和网页，数据评价更加相对准确。</p>
+        <p class="important">提示：据匿名用户反馈组队匹配池与单排匹配池不同，组队匹配池当队伍三名玩家其中任意一位数据发生变化时将存在“待定局”其持续场数无法确定，“待定局”数据过高将会导致匹配结果高压！</p>
         <div class="update-time">更新时间：2025年06月19日</div>
     `;
     
@@ -122,16 +121,16 @@ function generateReport() {
     // 确定对局强度
     let matchIntensity, intensityClass;
     if (quantScore < 100) {
-        matchIntensity = "低强对局";
+        matchIntensity = "低强对局（唐人）";
         intensityClass = "low";
     } else if (quantScore < 130) {
-        matchIntensity = "正常对局";
+        matchIntensity = "正常对局（一般）";
         intensityClass = "normal";
     } else if (quantScore < 150) {
-        matchIntensity = "高压对局";
+        matchIntensity = "高压对局（护航）";
         intensityClass = "high";
     } else {
-        matchIntensity = "黑屋对局";
+        matchIntensity = "黑屋对局（外挂）";
         intensityClass = "black";
     }
     
@@ -203,7 +202,7 @@ function updateAdvice(intensity) {
                     <li>关注撤离策略，避免过于激进的游戏风格</li>
                     <li>组队时应检查队友数据，避免异常账号影响匹配</li>
                 </ul>
-                <p>注意：长期低强度游戏可能导致物品爆率状态变化</p>
+                <p>注意：长期低强度游戏可能导致物品爆率状态变化！无法确定该变化是否良好。</p>
             `;
             break;
             
@@ -226,8 +225,8 @@ function updateAdvice(intensity) {
                 <ul>
                     <li>适当降低战斗强度，避免连续高击杀局</li>
                     <li>分散高收益对局，避免连续多局超高收益</li>
-                    <li>检查组队成员是否存在异常账号</li>
-                    <li>增加战术撤离比例，平衡撤离率</li>
+                    <li>检查组队成员是否存在异常账号、标记账号</li>
+                    <li>减少瞬杀比例，增加TTK，平衡撤离率</li>
                     <li>考虑暂停游戏时常，重置匹配模式</li>
                 </ul>
                 <p>高压对局通常是进入黑屋匹配的前兆，请谨慎调整游戏行为。</p>
@@ -242,8 +241,7 @@ function updateAdvice(intensity) {
                     <li>暂停高收益玩法，减少单局资产获取</li>
                     <li>彻底检查组队成员，排除异常账号</li>
                     <li>增加非战斗比例，降低近期撤离率</li>
-                    <li>暂停游戏24小时，等待匹配重置</li>
-                    <li>考虑进行几局低强度侦察或物资搜集局</li>
+                    <li>暂停游戏3-7天降低活跃度（14天最佳），等待匹配重置</li>
                 </ul>
                 <p class="red-text">警告：持续黑屋匹配可能导致账号被标记或限制，请谨慎游戏。</p>
             `;
