@@ -1,318 +1,393 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?9a837349ed45ebc2d38ad5dbc499a8be";
-            var s = document.getElementsByTagName("script")[0]; 
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三角洲黑屋推测系统</title>
+    <title>网站维护中 - 即将回归</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .maintenance-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .maintenance-container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulse 8s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo span {
+            color: #ffd700;
+        }
+        
+        .maintenance-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            color: #ffd700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .highlight {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px 15px;
+            min-width: 100px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .countdown-item:hover {
+            transform: translateY(-10px);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+        
+        .countdown-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .social-link:hover {
+            background: #ffd700;
+            color: #1a2980;
+            transform: translateY(-5px);
+        }
+        
+        .contact-form {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .contact-form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffd700;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .submit-btn {
+            background: #ffd700;
+            color: #1a2980;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .submit-btn:hover {
+            background: #ffc400;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 30px auto;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            width: 65%;
+            background: #ffd700;
+            border-radius: 3px;
+            animation: progress-animation 3s infinite alternate;
+        }
+        
+        @keyframes progress-animation {
+            0% { width: 65%; }
+            100% { width: 75%; }
+        }
+        
+        .status-text {
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .maintenance-container {
+                padding: 30px 20px;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 15px 10px;
+            }
+            
+            .countdown-value {
+                font-size: 2rem;
+            }
+            
+            .maintenance-icon {
+                font-size: 4rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-shield-alt"></i> 三角洲黑屋推测系统</h1>
-            <p class="subtitle">基于玩家行为数据分析的隔离机制推测系统</p>
-        </header>
-        
-        <!-- 公告模块 -->
-        <div class="announcement-card">
-            <div class="announcement-header">
-                <i class="fas fa-bullhorn"></i>
-                <span>系统公告</span>
-            </div>
-            <div class="announcement-content" id="announcement-content">
-                <!-- 公告内容将通过JavaScript动态加载 -->
-                <p>正在加载公告内容...</p>
-            </div>
+    <div class="maintenance-container">
+        <div class="logo">
+            <h1>网站<span>维护</span>中</h1>
         </div>
         
-        <div class="card-container">
-            <!-- 玩家数据卡片 -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-user"></i>
-                    <span>玩家数据</span>
-                </div>
-                <div class="card-body">
-                    <div class="module">
-                        <h3 class="module-title">
-                            <i class="fas fa-chart-line"></i>
-                            当前赛季主体数据
-                        </h3>
-                        <div class="data-grid">
-                            <div class="input-group">
-                                <label>普通KD</label>
-                                <input type="number" id="normal-kd" min="0" step="0.01" placeholder="输入数值">
-                            </div>
-                            <div class="input-group">
-                                <label>机密KD</label>
-                                <input type="number" id="confidential-kd" min="0" step="0.01" placeholder="输入数值">
-                            </div>
-                            <div class="input-group">
-                                <label>绝密KD</label>
-                                <input type="number" id="top-secret-kd" min="0" step="0.01" placeholder="输入数值">
-                            </div>
-                            <div class="input-group">
-                                <label>总体撤离率</label>
-                                <input type="number" id="extract-rate" min="0" max="100" step="0.1" placeholder="输入百分比">
-                            </div>
-                            <div class="input-group">
-                                <label>近十局撤离率</label>
-                                <input type="number" id="recent-extract" min="0" max="100" step="0.1" placeholder="输入百分比">
-                            </div>
-                            <div class="input-group">
-                                <label>赚损比 <span class="unit">(M)</span></label>
-                                <input type="number" id="profit-ratio" min="0" step="0.01" placeholder="输入数值">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="module">
-                        <h3 class="module-title">
-                            <i class="fas fa-star"></i>
-                            当前赛季五维能力
-                        </h3>
-                        <div class="data-grid">
-                            <div class="input-group">
-                                <label>战斗</label>
-                                <input type="number" id="combat" min="0" max="100" step="1" placeholder="0-100">
-                            </div>
-                            <div class="input-group">
-                                <label>财富</label>
-                                <input type="number" id="wealth" min="0" max="100" step="1" placeholder="0-100">
-                            </div>
-                            <div class="input-group">
-                                <label>搜索</label>
-                                <input type="number" id="search" min="0" max="100" step="1" placeholder="0-100">
-                            </div>
-                            <div class="input-group">
-                                <label>合作</label>
-                                <input type="number" id="cooperation" min="0" max="100" step="1" placeholder="0-100">
-                            </div>
-                            <div class="input-group">
-                                <label>生存</label>
-                                <input type="number" id="survival" min="0" max="100" step="1" placeholder="0-100">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="maintenance-icon">
+            <i class="fas fa-tools"></i>
+        </div>
+        
+        <h2>我们正在对网站进行<span class="highlight">升级维护</span></h2>
+        
+        <p class="description">
+            为了给您提供更好的服务和体验，我们正在进行系统升级和维护工作。在此期间，网站将暂时无法访问。我们对造成的不便深表歉意，并感谢您的理解与耐心等待。
+        </p>
+        
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        
+        <p class="status-text">维护进度：45% - 核心算法中影响因子设置错误，正在修复</p>
+        
+        <h3>预计恢复时间</h3>
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-value" id="days">0</div>
+                <div class="countdown-label">天</div>
             </div>
-            
-            <!-- 机制说明卡片 -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-cogs"></i>
-                    <span>机制说明</span>
-                </div>
-                <div class="card-body">
-                    <div class="content-box">
-                        <p>黑屋本质是游戏对"异常行为"的隔离机制，可能触发场景如下：</p>
-                        <p>1. 高强度对局行为：如"打人猛攻流"，玩家短期内高频击败干员（连续多局高击杀），或隐藏分因战绩飙升，系统判定与"高风险玩家"（含疑似外挂、高违规倾向账号）行为趋同，触发隔离；</p>
-                        <p>2. 异常玩法流派：像"唐人玩法"（低强度刷局控数据）、"不打不搜装满保险找人送"（非正常游戏流程），因偏离常规游玩逻辑，被系统识别为异常，强制送入黑屋；</p>
-                        <p>3. 资产/收益异常：护航玩家连续多局带出高额资产（如单局500万+），或"舔包流"（零击杀但满背包撤离）等非常规收益行为，触发针对"经济异常"的隔离，迫使消耗资产。</p>
-                        <p class="red-text">4. 异常组队情况：队伍中出现异常人员（被标记人员）或匹配敌人数据异常（被标记或外挂使用者）而被玩家击杀导致自身账号被异常标记导致匹配黑屋对局（匿名用户提供）</p>
-                    </div>
-                    <div class="content-box">
-                        <p>本推测系统基于对Bilibili、抖音、快手等平台视频内容分析提炼制作，其内容及计算公式与游戏存在较大误差；关于游戏是否存在小黑屋机制以官方公告为准！</p>
-                    </div>
-                </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="hours">06</div>
+                <div class="countdown-label">小时</div>
             </div>
-            
-            <!-- 免责声明卡片 -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span>免责声明</span>
-                </div>
-                <div class="card-body">
-                    <div class="content-box">
-                        <p>本工具仅用于玩家数据分析与行为模式推测，所有计算结果均为基于公开信息的理论推测，不代表游戏实际机制。</p>
-                        <p>本工具不会收集或存储您的个人数据，所有计算均在浏览器本地完成。分析结果仅供参考，不构成任何游戏建议。</p>
-                        <p>游戏开发者保留对匹配机制和账号管理的最终解释权，请以官方公告为准。</p>
-                    </div>
-                </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="minutes">45</div>
+                <div class="countdown-label">分钟</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="seconds">30</div>
+                <div class="countdown-label">秒</div>
             </div>
         </div>
         
-        <div class="btn-container">
-            <button class="analyze-btn" id="analyze-btn">
-                <i class="fas fa-chart-pie"></i>
-                分析数据
-            </button>
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+        </div>
         </div>
     </div>
-    
-    <!-- 进度条模态框 -->
-    <div class="modal" id="progress-modal">
-        <div class="modal-content">
-            <div class="progress-container">
-                <p class="progress-text">分析中，请稍候...</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 报告模态框 -->
-    <div class="modal" id="report-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                三角洲黑屋推测玩家数据报告
-                <button class="close-modal" id="close-report">&times;</button>
-            </div>
+
+    <script>
+        // 倒计时功能
+        function updateCountdown() {
+            // 设置维护结束时间（当前时间 + 2天）
+            const endTime = new Date();
+            endTime.setDate(endTime.getDate() + 2);
+            endTime.setHours(12, 45, 30);
             
-            <div class="report-card">
-                <!-- 玩家数据卡片 -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-user"></i>
-                        <span>玩家数据</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="data-grid">
-                            <div class="input-group">
-                                <label>普通KD</label>
-                                <input type="text" id="report-normal-kd" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>机密KD</label>
-                                <input type="text" id="report-confidential-kd" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>绝密KD</label>
-                                <input type="text" id="report-top-secret-kd" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>总体撤离率</label>
-                                <input type="text" id="report-extract-rate" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>近十局撤离率</label>
-                                <input type="text" id="report-recent-extract" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>赚损比 <span class="unit">(M)</span></label>
-                                <input type="text" id="report-profit-ratio" readonly>
-                            </div>
-                        </div>
-                        
-                        <div class="data-grid">
-                            <div class="input-group">
-                                <label>战斗</label>
-                                <input type="text" id="report-combat" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>财富</label>
-                                <input type="text" id="report-wealth" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>搜索</label>
-                                <input type="text" id="report-search" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>合作</label>
-                                <input type="text" id="report-cooperation" readonly>
-                            </div>
-                            <div class="input-group">
-                                <label>生存</label>
-                                <input type="text" id="report-survival" readonly>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 分析结果卡片 -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>分析结果</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="result-card">
-                            <h3 class="result-title">
-                                <i class="fas fa-chess-knight"></i>
-                                对局强度分析
-                            </h3>
-                            <div class="result-value" id="match-intensity">正常对局</div>
-                        </div>
-                        
-                        <h3 class="result-title">
-                            <i class="fas fa-map-marked-alt"></i>
-                            能力值分布图
-                        </h3>
-                        <div class="chart-container">
-                            <div class="x-axis"></div>
-                            <div class="y-axis"></div>
-                            <div class="axis-label x-label">基础值</div>
-                            <div class="axis-label y-label">战斗值</div>
-                            <div class="data-point" id="data-point"></div>
-                        </div>
-                        
-                        <div class="legend">
-                            <div class="legend-item">
-                                <div class="legend-color legend-low"></div>
-                                <span>低强对局(唐人局)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color legend-normal"></div>
-                                <span>正常对局(一般局)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color legend-high"></div>
-                                <span>高压对局(护航局)</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color legend-black"></div>
-                                <span>黑屋对局(外挂局)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 数据建议卡片 -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-lightbulb"></i>
-                        <span>数据建议</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="advice-card">
-                            <h3 class="advice-title">
-                                <i class="fas fa-user-shield"></i>
-                                行为优化建议
-                            </h3>
-                            <div class="advice-content" id="advice-content">
-                                <p>根据您的数据分析结果，建议采取以下策略优化游戏行为：</p>
-                                <ul>
-                                    <li>平衡战斗行为，避免连续多局高击杀表现</li>
-                                    <li>调整收益模式，避免单局过高资产收益</li>
-                                    <li>组队时注意队友行为模式，避免与异常账号组队</li>
-                                    <li>保持撤离率在合理范围，避免极端刷数据行为</li>
-                                </ul>
-                                <p>请注意：以上建议仅基于数据分析模型，实际效果可能因游戏机制调整而变化。</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <footer>
-        <p>三角洲黑屋机制分析器 &copy; 2025 | 本工具仅供娱乐参考，不作为游戏机制官方说明</p>
-    </footer>
-    
-    <script src="script.js"></script>
+            const now = new Date();
+            const diff = endTime - now;
+            
+            if (diff <= 0) {
+                // 维护已完成
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // 初始化倒计时
+        updateCountdown();
+        // 每秒更新一次
+        setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
